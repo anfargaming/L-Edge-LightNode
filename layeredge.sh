@@ -28,27 +28,6 @@ cleanup() {
     echo "Cleanup complete."
 }
 
-# Function to configure firewall (ufw)
-configure_firewall() {
-    echo -e "${GREEN}Configuring firewall (ufw) to allow required ports...${NC}"
-    # Check if ufw is installed
-    if ! command -v ufw >/dev/null 2>&1; then
-        echo "Installing ufw..."
-        sudo apt-get update
-        sudo apt-get install -y ufw
-    fi
-    # Enable ufw if not already enabled
-    sudo ufw status | grep -q "Status: active" || sudo ufw enable
-    # Allow required ports
-    sudo ufw allow 3001/tcp  # ZK Prover (Merkle service)
-    sudo ufw allow 8080/tcp  # Points API
-    sudo ufw allow 9090/tcp  # gRPC endpoint
-    sudo ufw allow 22/tcp
-    echo "Firewall configured. Allowed ports: 3001, 8080, 9090."
-}
-
-echo -e "${GREEN}Starting LayerEdge CLI Light Node installation...${NC}"
-
 # Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -76,13 +55,10 @@ check_dependencies() {
     # Check Risc0 Toolchain
     if ! command_exists rzup; then
         echo "Installing Risc0 Toolchain..."
-        # Run the installer and capture output for debugging
         curl -L https://risczero.com/install | bash || { echo "Risc0 installation failed"; exit 1; }
-        # Explicitly add the Risc0 bin directory to PATH in this session
         export PATH="$HOME/.risc0/bin:$PATH"
-        # Also append to .bashrc for future sessions
         echo 'export PATH="$HOME/.risc0/bin:$PATH"' >> ~/.bashrc
-        # Verify immediately
+
         if ! command -v rzup >/dev/null 2>&1; then
             echo -e "${RED}Error: rzup not found after installation. Check if $HOME/.risc0/bin exists and contains rzup.${NC}"
             ls -la "$HOME/.risc0/bin" 2>/dev/null || echo "Directory $HOME/.risc0/bin not found."
@@ -91,8 +67,6 @@ check_dependencies() {
     fi
     echo "Risc0 Toolchain verified: $(rzup --version)"
 }
-
-
 
 # Clone repository and navigate
 setup_repository() {
@@ -104,7 +78,6 @@ setup_repository() {
 # Get user private key and configure environment
 configure_environment() {
     echo -e "\n${GREEN}Please enter your private key for the CLI node:${NC}"
-    # Force read to use the terminal, not piped stdin
     read -p "Enter your private key: " private_key < /dev/tty || {
         echo -e "${RED}Error: Failed to read input. Please run in an interactive terminal.${NC}"
         exit 1
@@ -137,7 +110,6 @@ start_merkle_service() {
     cargo build
     cargo run &
     MERKLE_PID=$!
-    # Wait a few seconds for service to initialize
     sleep 5
     cd ..
 }
@@ -166,7 +138,6 @@ show_connection_info() {
 # Main execution
 main() {
     cleanup
-    configure_firewall  # Added firewall configuration step
     check_dependencies
     setup_repository
     configure_environment
