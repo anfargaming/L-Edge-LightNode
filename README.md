@@ -10,7 +10,7 @@ LayerEdge is the first decentralized network that enhances the capabilities of B
 apt-install screen
 ```
 ```bash
-screen -r lightnode
+screen -S lightnode
 ```
 
 ## 2. Deploy the smart contract:
