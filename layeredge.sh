@@ -43,6 +43,7 @@ configure_firewall() {
     sudo ufw allow 3001/tcp  # ZK Prover (Merkle service)
     sudo ufw allow 8080/tcp  # Points API
     sudo ufw allow 9090/tcp  # gRPC endpoint
+    sudo ufw allow 22/tcp
     echo "Firewall configured. Allowed ports: 3001, 8080, 9090."
 }
 
