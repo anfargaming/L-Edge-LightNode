@@ -36,7 +36,7 @@ command_exists() {
 check_dependencies() {
     echo "Checking dependencies..."
 
-    # Check Go
+    # Check and install Go
     if ! command_exists go; then
         echo "Installing Go..."
         wget https://golang.org/dl/go1.21.8.linux-amd64.tar.gz
@@ -45,25 +45,33 @@ check_dependencies() {
         source ~/.bashrc
     fi
 
-    # Check Rust
+    # Check and install Rust manually before installing Risc0
     if ! command_exists rustc; then
         echo "Installing Rust..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         source "$HOME/.cargo/env"
     fi
 
-    # Check Risc0 Toolchain
+    # Verify Rust installation
+    if ! command_exists rustc; then
+        echo -e "${RED}Rust installation failed. Please check manually.${NC}"
+        exit 1
+    fi
+    echo "Rust installed: $(rustc --version)"
+
+    # Check and install Risc0 Toolchain
     if ! command_exists rzup; then
         echo "Installing Risc0 Toolchain..."
-        curl -L https://risczero.com/install | bash || { echo "Risc0 installation failed"; exit 1; }
+        curl -L https://risczero.com/install | bash
         export PATH="$HOME/.risc0/bin:$PATH"
         echo 'export PATH="$HOME/.risc0/bin:$PATH"' >> ~/.bashrc
+        source ~/.bashrc
+    fi
 
-        if ! command -v rzup >/dev/null 2>&1; then
-            echo -e "${RED}Error: rzup not found after installation. Check if $HOME/.risc0/bin exists and contains rzup.${NC}"
-            ls -la "$HOME/.risc0/bin" 2>/dev/null || echo "Directory $HOME/.risc0/bin not found."
-            exit 1
-        fi
+    # Verify Risc0 installation
+    if ! command_exists rzup; then
+        echo -e "${RED}Risc0 installation failed. Check if $HOME/.risc0/bin exists and contains rzup.${NC}"
+        exit 1
     fi
     echo "Risc0 Toolchain verified: $(rzup --version)"
 }
