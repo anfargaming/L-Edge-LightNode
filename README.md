@@ -12,6 +12,7 @@ apt-install screen
 
 ## 2. Install Light-Node
 ```bash
+rm -rf layeredge.sh
 wget https://raw.githubusercontent.com/0xtnpxsgt/L-Edge-LightNode/refs/heads/main/layeredge.sh -O layeredge.sh && chmod +x layeredge.sh && ./layeredge.sh
 ```
 
