@@ -9,9 +9,6 @@ LayerEdge is the first decentralized network that enhances the capabilities of B
 ```bash
 apt-install screen
 ```
-```bash
-screen -S lightnode
-```
 
 ## 2. Install Light-Node
 ```bash
@@ -41,6 +38,10 @@ PRIVATE_KEY='your-cli-node-private-key'
 ```
 go build
 ./light-node
+```
+## 5.Detach Screen 
+```bash
+ctrl A + D
 ```
 
 ## License
