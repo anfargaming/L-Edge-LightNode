@@ -21,11 +21,12 @@ curl -L https://risczero.com/install | bash && echo -e "✅ RISC0 installer down
 # Ensure RISC0 is in the PATH
 export PATH="$HOME/.risc0/bin:$PATH"
 echo 'export PATH="$HOME/.risc0/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+source "/root/.bashrc"
 
 # Install RISC0 toolchain (use cargo-risczero instead of stable)
 echo -e "🔧 Installing RISC0 toolchain..."
-rzup install cargo-risczero && echo -e "✅ RISC0 toolchain installed!"
+rzup install && echo -e "✅ RISC0 toolchain installed!"
+source "/root/.bashrc"
 
 # Verify installation
 if ! command -v rzup &> /dev/null; then
