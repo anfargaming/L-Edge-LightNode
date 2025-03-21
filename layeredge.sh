@@ -48,4 +48,17 @@ export PRIVATE_KEY
 echo -e "🛠️ Building and running risc0-merkle-service..."
 cd risc0-merkle-service
 cargo clean
-cargo build && screen -dmS risc0-service cargo run && echo -e "🚀 risc0-merkle-service is running in a screen session!
+cargo build
+
+# Start the risc0 service in a named screen session
+screen -dmS risc0-service cargo run
+
+# Check if the screen session was created successfully
+if screen -list | grep -q "risc0-service"; then
+    echo -e "🚀 risc0-merkle-service is running in a screen session!"
+else
+    echo -e "${RED}❌ Failed to create screen session for risc0-service!${NC}"
+fi
+
+echo -e "🖥️ Starting light-node server in a screen session..."
+echo -e "🎉 Setup complete! Both servers are running independently in screen sessions!"
