@@ -23,9 +23,9 @@ export PATH="$HOME/.risc0/bin:$PATH"
 echo 'export PATH="$HOME/.risc0/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
-# Install RISC0 toolchain
+# Install RISC0 toolchain (use cargo-risczero instead of stable)
 echo -e "🔧 Installing RISC0 toolchain..."
-rzup install stable && echo -e "✅ RISC0 toolchain installed!"
+rzup install cargo-risczero && echo -e "✅ RISC0 toolchain installed!"
 
 # Verify installation
 if ! command -v rzup &> /dev/null; then
@@ -48,7 +48,4 @@ export PRIVATE_KEY
 echo -e "🛠️ Building and running risc0-merkle-service..."
 cd risc0-merkle-service
 cargo clean
-cargo build && screen -dmS risc0-service cargo run && echo -e "🚀 risc0-merkle-service is running in a screen session!"
-
-echo -e "🖥️ Starting light-node server in a screen session..."
-echo -e "🎉 Setup complete! Both servers are running independently in screen sessions!"
+cargo build && screen -dmS risc0-service cargo run && echo -e "🚀 risc0-merkle-service is running in a screen session!
