@@ -5,10 +5,6 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Run the button logo script (optional branding)
-curl -sL https://raw.githubusercontent.com/0xtnpxsgt/logo/refs/heads/main/logo.sh | bash
-sleep 5
-
 echo -e "🚀 Starting setup process..."
 rm -rf $HOME/light-node
 echo -e "🔗 Cloning repository..."
